@@ -1,3 +1,3 @@
-#Week01
+# Week01
 
 CLI 만들기
