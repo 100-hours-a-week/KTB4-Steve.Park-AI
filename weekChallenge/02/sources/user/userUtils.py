@@ -8,27 +8,27 @@ async def signup(user: UserDetail) -> ResponseEntity:
 	msg = ResponseEntity()
 
 	if user.username == "" or user.username is None:
-		msg.flag = RF.EmptyUserName.value
+		msg.error_code = RF.EmptyUserName.value
 		msg.msg = RF.EmptyUserName.message
 		return msg
 
 	elif user.pwd == "" or user.pwd is None:
-		msg.flag = RF.EmptyUserPwd.value
+		msg.error_code = RF.EmptyUserPwd.value
 		msg.msg = RF.EmptyUserPwd.message
 		return msg
 
 	elif user.useremail == "" or user.useremail is None:
-		msg.flag = RF.EmptyUserEmail.value
+		msg.error_code = RF.EmptyUserEmail.value
 		msg.msg = RF.EmptyUserEmail.message
 		return msg
 
 	elif await userdb.checkUserEmailDuplicated(user.useremail):
-		msg.flag = RF.UserEmailExist.value
+		msg.error_code = RF.UserEmailExist.value
 		msg.msg = RF.UserEmailExist.message
 		return msg
 
 	elif await userdb.checkUserNicknameDuplicated(user.username):
-		msg.flag = RF.UserNameDuplicated.value
+		msg.error_code = RF.UserNameDuplicated.value
 		msg.msg = RF.UserNameDuplicated.message
 		return msg
 
@@ -36,8 +36,8 @@ async def signup(user: UserDetail) -> ResponseEntity:
 
 	result = await userdb.createUser(user)
 
-	if result.flag != RF.Success.value:
-		msg.flag = result.flag
+	if result.error_code != RF.Success.value:
+		msg.error_code = result.error_code
 		msg.msg = result.msg
 		return msg
 
@@ -51,19 +51,19 @@ async def login(useremail: str, pwd: str) -> ResponseEntity:
 	msg = ResponseEntity()
 
 	if useremail == "" or useremail is None:
-		msg.flag = RF.EmptyUserEmail.value
+		msg.error_code = RF.EmptyUserEmail.value
 		msg.msg = RF.EmptyUserEmail.message
 		return msg
 
 	user = await userdb.userLogin(useremail, pwd)
-	if user.flag != RF.Success.value:
-		msg.flag = user.flag
+	if user.error_code != RF.Success.value:
+		msg.error_code = user.error_code
 		msg.msg = user.msg
 		return msg
 
 	decryptedPwd = decryptPwd(user.res.dict().get("pwd", None))
 	if decryptedPwd != pwd:
-		msg.flag = RF.InvalidUserPwd.value
+		msg.error_code = RF.InvalidUserPwd.value
 		msg.msg = RF.InvalidUserPwd.message
 		return msg
 

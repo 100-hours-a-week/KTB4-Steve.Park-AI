@@ -7,7 +7,7 @@ BOARD_PAGE_SIZE: Final[int] = 10
 SECRET_KEY: Final[str] = "week02fastapites"
 
 class ResponseEntity(BaseModel):
-	flag: int = 0
+	error_code: int = 0
 	msg: str = "Success"
 	res: Any = None
 

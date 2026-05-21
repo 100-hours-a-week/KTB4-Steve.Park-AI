@@ -57,7 +57,7 @@
 
       try {
         const data = await api('POST', '/session', null, { useremail: email, pwd });
-        if (data.flag !== 0) {
+        if (data.error_code !== 0) {
           showAlert(data.msg);
         } else {
           localStorage.setItem('username', data.res.username);

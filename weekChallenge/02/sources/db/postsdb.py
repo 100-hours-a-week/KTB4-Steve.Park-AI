@@ -49,7 +49,7 @@ async def getBoardDetail(idx: int) -> ResponseEntity:
         board = result.scalar_one_or_none()
 
         if board is None:
-            msg.flag = RF.InvalidBoardIdx.value
+            msg.error_code = RF.InvalidBoardIdx.value
             msg.msg = RF.InvalidBoardIdx.message
             return msg
 
@@ -100,7 +100,7 @@ async def writeBoard(board: Board) -> ResponseEntity:
                 ))
     except Exception as e:
         print(e)
-        msg.flag = RF.SaveBoardDataFailed.value
+        msg.error_code = RF.SaveBoardDataFailed.value
         msg.msg = RF.SaveBoardDataFailed.message
 
     return msg
@@ -139,7 +139,7 @@ async def getBoardCommentDetail(idx: int) -> ResponseEntity:
         boardComment = result.scalar_one_or_none()
 
         if boardComment is None:
-            msg.flag = RF.InvalidBoardCommentIdx.value
+            msg.error_code = RF.InvalidBoardCommentIdx.value
             msg.msg = RF.InvalidBoardCommentIdx.message
             return msg
 
@@ -171,7 +171,7 @@ async def writeBoardComment(boardComment: BoardComment) -> ResponseEntity:
                 ))
     except Exception as e:
         print(e)
-        msg.flag = RF.SaveBoardCommentDataFailed.value
+        msg.error_code = RF.SaveBoardCommentDataFailed.value
         msg.msg = RF.SaveBoardCommentDataFailed.message
 
     return msg

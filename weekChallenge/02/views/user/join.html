@@ -65,7 +65,7 @@
           lastlogindt: nowIso(),
         });
 
-        if (data.flag !== 0) {
+        if (data.error_code !== 0) {
           showAlert(data.msg);
         } else {
           showAlert('가입이 완료됐습니다! 로그인 페이지로 이동합니다.', 'success');

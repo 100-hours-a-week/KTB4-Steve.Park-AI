@@ -11,8 +11,8 @@ async def getGemmaPostSummary(idx: int) -> ResponseEntity:
     msg = ResponseEntity()
 
     board = await postsdb.getBoardDetail(idx)
-    if board.flag != RF.Success.value:
-        msg.flag = board.flag
+    if board.error_code != RF.Success.value:
+        msg.error_code = board.error_code
         msg.msg = board.msg
         return msg
     
@@ -33,8 +33,8 @@ async def getGemmaPostCommentSummary(idx: int) -> ResponseEntity:
     msg = ResponseEntity()
 
     board = await postsdb.getBoardDetail(idx)
-    if board.flag != RF.Success.value:
-        msg.flag = board.flag
+    if board.error_code != RF.Success.value:
+        msg.error_code = board.error_code
         msg.msg = board.msg
         return msg
     
@@ -42,7 +42,7 @@ async def getGemmaPostCommentSummary(idx: int) -> ResponseEntity:
     comments = comments_result.res or []
 
     if not comments:
-        msg.flag = RF.BoardCommentNotExist.value
+        msg.error_code = RF.BoardCommentNotExist.value
         msg.msg = RF.BoardCommentNotExist.message
         return msg
     

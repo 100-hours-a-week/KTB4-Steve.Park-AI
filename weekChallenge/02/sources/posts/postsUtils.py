@@ -9,7 +9,7 @@ async def getBoardList(count: int) -> ResponseEntity:
 
 async def getBoardDetail(idx: int) -> ResponseEntity:
 	result = await postsdb.getBoardDetail(idx)
-	if result.flag != RF.Success.value:
+	if result.error_code != RF.Success.value:
 		return result
 
 	await postsdb.updateBoardView(idx)
@@ -27,12 +27,12 @@ async def getBoardDetail(idx: int) -> ResponseEntity:
 async def writeBoard(board: Board) -> ResponseEntity:
 	msg = ResponseEntity()
 	if board.title == "" or board.title is None:
-		msg.flag = RF.BoardTitleEmpty.value
+		msg.error_code = RF.BoardTitleEmpty.value
 		msg.msg = RF.BoardTitleEmpty.message
 		return msg
 	
 	elif board.contents == "" or board.contents is None:
-		msg.flag = RF.BoardContentsEmpty.value
+		msg.error_code = RF.BoardContentsEmpty.value
 		msg.msg = RF.BoardContentsEmpty.message
 		return msg
 	
@@ -42,18 +42,18 @@ async def updateBoard(idx:int, board: Board) -> ResponseEntity:
 	msg = ResponseEntity()
 
 	boarddetail = await postsdb.getBoardDetail(idx)
-	if boarddetail.flag != RF.Success.value:
-		msg.flag = boarddetail.flag
+	if boarddetail.error_code != RF.Success.value:
+		msg.error_code = boarddetail.error_code
 		msg.msg = boarddetail.msg
 		return msg
 	
 	elif board.title == "" or board.title is None:
-		msg.flag = RF.BoardTitleEmpty.value
+		msg.error_code = RF.BoardTitleEmpty.value
 		msg.msg = RF.BoardTitleEmpty.message
 		return msg
 	
 	elif board.contents == "" or board.contents is None:
-		msg.flag = RF.BoardContentsEmpty.value
+		msg.error_code = RF.BoardContentsEmpty.value
 		msg.msg = RF.BoardContentsEmpty.message
 		return msg
 	
@@ -64,8 +64,8 @@ async def updateBoard(idx:int, board: Board) -> ResponseEntity:
 async def deleteBoard(idx: int) -> ResponseEntity:
 	msg = ResponseEntity()
 	boarddetail = await postsdb.getBoardDetail(idx)
-	if boarddetail.flag != RF.Success.value:
-		msg.flag = boarddetail.flag
+	if boarddetail.error_code != RF.Success.value:
+		msg.error_code = boarddetail.error_code
 		msg.msg = boarddetail.msg
 		return msg
 	
@@ -77,13 +77,13 @@ async def writeBoardComment(idx: int, comment: BoardComment) -> ResponseEntity:
 	msg = ResponseEntity()
 	
 	boarddetail = await postsdb.getBoardDetail(idx)
-	if boarddetail.flag != RF.Success.value:
-		msg.flag = boarddetail.flag
+	if boarddetail.error_code != RF.Success.value:
+		msg.error_code = boarddetail.error_code
 		msg.msg = boarddetail.msg
 		return msg
 	
 	elif comment.contents == "" or comment.contents is None:
-		msg.flag = RF.BoardCommentContentsEmpty.value
+		msg.error_code = RF.BoardCommentContentsEmpty.value
 		msg.msg = RF.BoardCommentContentsEmpty.message
 		return msg
 	
@@ -96,19 +96,19 @@ async def updateBoardComment(idx: int, ridx: int, comment: BoardComment) -> Resp
 	msg = ResponseEntity()
 	
 	boarddetail = await postsdb.getBoardDetail(idx)
-	if boarddetail.flag != RF.Success.value:
-		msg.flag = boarddetail.flag
+	if boarddetail.error_code != RF.Success.value:
+		msg.error_code = boarddetail.error_code
 		msg.msg = boarddetail.msg
 		return msg
 	
 	if comment.contents == "" or comment.contents is None:
-		msg.flag = RF.BoardCommentContentsEmpty.value
+		msg.error_code = RF.BoardCommentContentsEmpty.value
 		msg.msg = RF.BoardCommentContentsEmpty.message
 		return msg
 	
 	commentdetail = await postsdb.getBoardCommentDetail(ridx)
-	if commentdetail.flag != RF.Success.value:
-		msg.flag = commentdetail.flag
+	if commentdetail.error_code != RF.Success.value:
+		msg.error_code = commentdetail.error_code
 		msg.msg = commentdetail.msg
 		return msg
 
@@ -120,14 +120,14 @@ async def deleteBoardComment(idx: int, ridx: int) -> ResponseEntity:
 	msg = ResponseEntity()
 	
 	boarddetail = await postsdb.getBoardDetail(idx)
-	if boarddetail.flag != RF.Success.value:
-		msg.flag = boarddetail.flag
+	if boarddetail.error_code != RF.Success.value:
+		msg.error_code = boarddetail.error_code
 		msg.msg = boarddetail.msg
 		return msg
 	
 	boardcomment = await postsdb.getBoardCommentDetail(ridx)
-	if boardcomment.flag != RF.Success.value:
-		msg.flag = boardcomment.flag
+	if boardcomment.error_code != RF.Success.value:
+		msg.error_code = boardcomment.error_code
 		msg.msg = boardcomment.msg
 		return msg
 	
@@ -138,8 +138,8 @@ async def deleteBoardComment(idx: int, ridx: int) -> ResponseEntity:
 async def updateBoardLikes(idx: int, username: str) -> ResponseEntity:
 	msg = ResponseEntity()
 	boarddetail = await postsdb.getBoardDetail(idx)
-	if boarddetail.flag != RF.Success.value:
-		msg.flag = boarddetail.flag
+	if boarddetail.error_code != RF.Success.value:
+		msg.error_code = boarddetail.error_code
 		msg.msg = boarddetail.msg
 		return msg
 	

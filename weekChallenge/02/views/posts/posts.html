@@ -63,7 +63,7 @@
         const offset = (currentPage - 1) * PAGE_SIZE;
         const data   = await api('GET', '/posts', null, { count: offset });
 
-        if (data.flag !== 0 || !data.res || data.res.length === 0) {
+        if (data.error_code !== 0 || !data.res || data.res.length === 0) {
           list.innerHTML = '<div class="empty-state"><p>게시글이 없습니다.</p></div>';
         } else {
           list.innerHTML = data.res.map(post => `

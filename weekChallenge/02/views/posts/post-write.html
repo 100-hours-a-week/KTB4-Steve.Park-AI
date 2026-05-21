@@ -52,7 +52,7 @@
 
     async function loadPost(idx) {
       const data = await api('GET', `/posts/${idx}`);
-      if (data.flag !== 0 || !data.res) { location.href = '/board'; return; }
+      if (data.error_code !== 0 || !data.res) { location.href = '/board'; return; }
 
       if (data.res.board.username !== getUser()) {
         alert('수정 권한이 없습니다.');
@@ -98,7 +98,7 @@
           ? await api('PUT',  `/posts/${editIdx}`, body)
           : await api('POST', '/posts',            body);
 
-        if (data.flag !== 0) {
+        if (data.error_code !== 0) {
           showAlert(data.msg);
         } else {
           location.href = editIdx ? `/detail?idx=${editIdx}` : '/board';
