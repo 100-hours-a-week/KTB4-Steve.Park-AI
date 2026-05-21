@@ -38,6 +38,29 @@ class BoardComment(BaseModel):
 	createdt: datetime
 	recentdt: datetime
 
+_MESSAGES: Final[dict] = {
+	0:  "Success",
+	1:  "Email already exists",
+	2:  "Invalid username",
+	3:  "Username is required",
+	4:  "Incorrect password",
+	5:  "Password is required",
+	6:  "Invalid email format",
+	7:  "Email is required",
+	8:  "Failed to save user data",
+	9:  "User is not available",
+	10: "Username already taken",
+	11: "Failed to save post",
+	12: "Failed to save comment",
+	13: "Post title is required",
+	14: "Post content is required",
+	15: "Post not found",
+	16: "Post ID is required",
+	17: "Comment not found",
+	18: "Comment content is required",
+	19: "No comments found",
+}
+
 class ReturnFlag(int, Enum):
 	Success = 0,
 	UserEmailExist = 1,
@@ -60,3 +83,7 @@ class ReturnFlag(int, Enum):
 	InvalidBoardCommentIdx = 17,
 	BoardCommentContentsEmpty = 18,
 	BoardCommentNotExist = 19
+
+	@property
+	def message(self) -> str:
+		return _MESSAGES.get(self.value, self.name)

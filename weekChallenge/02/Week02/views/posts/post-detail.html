@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>게시글 · Community Board</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="/board" class="nav-logo">Community Board</a>
+    <div class="nav-right">
+      <span class="nav-user" id="navUser"></span>
+      <button class="btn btn-outline btn-sm" onclick="logout()">로그아웃</button>
+    </div>
+  </nav>
+
+  <div class="page-wrap">
+    <div style="margin-bottom:16px">
+      <a href="/board" class="btn btn-outline btn-sm">← 목록으로</a>
+    </div>
+
+    <!-- Post -->
+    <div class="post-detail-card" id="postCard">
+      <p style="color:var(--muted)">불러오는 중...</p>
+    </div>
+
+    <!-- Post AI Summary -->
+    <div class="ai-box" id="postAiBox">
+      <div class="ai-box-label">🤖 AI 게시글 요약</div>
+      <p id="postAiText"></p>
+    </div>
+
+    <!-- Comments -->
+    <div style="margin-top:28px">
+      <div class="section-label" id="commentCount">댓글 0개</div>
+      <div class="comment-list" id="commentList"></div>
+
+      <!-- Comment AI Summary -->
+      <div id="commentAiWrap" style="margin-bottom:16px;display:none">
+        <button class="btn btn-ai btn-sm" onclick="loadCommentSummary()">🤖 댓글 AI 요약</button>
+        <div class="ai-box" id="commentAiBox" style="margin-top:10px">
+          <div class="ai-box-label">🤖 AI 댓글 요약</div>
+          <p id="commentAiText"></p>
+        </div>
+      </div>
+
+      <!-- Write Comment -->
+      <div class="comment-write-card">
+        <div class="section-label" style="margin-bottom:10px">댓글 작성</div>
+        <textarea id="commentInput" placeholder="댓글을 입력하세요"></textarea>
+        <button class="btn btn-primary btn-sm" id="commentBtn" onclick="writeComment()">등록</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/app.js"></script>
+  <script>
+    requireAuth();
+    document.getElementById('navUser').textContent = getUser();
+
+    const idx = getParam('idx');
+    if (!idx) location.href = 'posts.html';
+
+    let post = null;
+    let comments = [];
+    const commentContents = {};
+
+    function esc(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    async function load() {
+      const data = await api('GET', `/posts/${idx}`);
+      if (data.flag !== 0) { location.href = 'posts.html'; return; }
+
+      post     = data.res.board;
+      comments = data.res.comments || [];
+
+      renderPost();
+      renderComments();
+    }
+
+    function renderPost() {
+      const me       = getUser();
+      const isAuthor = post.username === me;
+      const liked    = post.likes && post.likes.includes(me);
+
+      document.getElementById('postCard').innerHTML = `
+        <h1 class="post-detail-title">${esc(post.title)}</h1>
+        <div class="post-detail-meta">
+          <span>✍ ${esc(post.username)}</span>
+          <span>👁 ${post.viewcount}</span>
+          <span>❤ <span id="likeCount">${post.likes ? post.likes.length : 0}</span></span>
+          <span>${formatDate(post.recentdt)}</span>
+        </div>
+        <div class="post-detail-body">${esc(post.contents)}</div>
+        <div class="post-actions">
+          <button class="btn btn-like btn-sm ${liked ? 'liked' : ''}" id="likeBtn" onclick="toggleLike()">
+            ❤ 좋아요
+          </button>
+          <button class="btn btn-ai btn-sm" onclick="loadPostSummary()">🤖 AI 요약</button>
+          ${isAuthor ? `
+            <div class="post-author-actions">
+              <a href="/write?idx=${post.idx}" class="btn btn-outline btn-sm">수정</a>
+              <button class="btn btn-danger btn-sm" onclick="deletePost()">삭제</button>
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    function renderComments() {
+      const me   = getUser();
+      const list = document.getElementById('commentList');
+
+      document.getElementById('commentCount').textContent = `댓글 ${comments.length}개`;
+
+      if (comments.length === 0) {
+        list.innerHTML = '<p style="color:var(--muted);font-size:13px;padding:8px 0">첫 댓글을 남겨보세요.</p>';
+        document.getElementById('commentAiWrap').style.display = 'none';
+        return;
+      }
+
+      document.getElementById('commentAiWrap').style.display = 'block';
+
+      comments.forEach(c => { commentContents[c.idx] = c.contents; });
+
+      list.innerHTML = comments.map(c => `
+        <div class="comment-item" id="comment-${c.idx}">
+          <div class="comment-header">
+            <span class="comment-author">${esc(c.username)}</span>
+            <span class="comment-date">${formatDate(c.recentdt)}</span>
+            ${c.username === me ? `
+              <div class="comment-actions">
+                <button class="btn btn-outline btn-sm" onclick="toggleEditComment(${c.idx})">수정</button>
+                <button class="btn btn-danger btn-sm"  onclick="deleteComment(${c.idx})">삭제</button>
+              </div>
+            ` : ''}
+          </div>
+          <div class="comment-body" id="cbody-${c.idx}">${esc(c.contents)}</div>
+          <div class="comment-edit-form" id="cedit-${c.idx}">
+            <textarea id="cedit-input-${c.idx}"></textarea>
+            <div class="comment-edit-actions">
+              <button class="btn btn-primary btn-sm" onclick="submitEditComment(${c.idx})">저장</button>
+              <button class="btn btn-outline btn-sm" onclick="toggleEditComment(${c.idx}, '')">취소</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function toggleLike() {
+      const data = await api('PATCH', `/posts/${idx}`, null, { username: getUser() });
+      if (data.flag === 0) {
+        const count = data.res;
+        document.getElementById('likeCount').textContent = count;
+        const btn = document.getElementById('likeBtn');
+        btn.classList.toggle('liked');
+        if (post.likes.includes(getUser())) {
+          post.likes = post.likes.filter(u => u !== getUser());
+        } else {
+          post.likes.push(getUser());
+        }
+      }
+    }
+
+    async function loadPostSummary() {
+      const box = document.getElementById('postAiBox');
+      const txt = document.getElementById('postAiText');
+      txt.textContent = '요약 중...';
+      box.classList.add('show');
+      const data = await api('GET', `/posts/${idx}/summary`);
+      txt.textContent = data.flag === 0 ? data.res : data.msg;
+    }
+
+    async function loadCommentSummary() {
+      const box = document.getElementById('commentAiBox');
+      const txt = document.getElementById('commentAiText');
+      txt.textContent = '요약 중...';
+      box.classList.add('show');
+      const data = await api('GET', `/posts/${idx}/comments/summary`);
+      txt.textContent = data.flag === 0 ? data.res : data.msg;
+    }
+
+    async function deletePost() {
+      if (!confirm('게시글을 삭제할까요?')) return;
+      const data = await api('DELETE', `/posts/${idx}`);
+      if (data.flag === 0) location.href = '/board';
+    }
+
+    async function writeComment() {
+      const contents = document.getElementById('commentInput').value.trim();
+      const btn      = document.getElementById('commentBtn');
+      if (!contents) return;
+
+      btn.disabled = true;
+      btn.innerHTML = '<span class="loader"></span>';
+
+      const data = await api('POST', `/posts/${idx}/comments`, {
+        idx: 0, ridx: 0,
+        username: getUser(),
+        contents,
+        createdt: nowIso(),
+        recentdt: nowIso(),
+      });
+
+      if (data.flag === 0) {
+        document.getElementById('commentInput').value = '';
+        await load();
+      }
+
+      btn.disabled = false;
+      btn.textContent = '등록';
+    }
+
+    function toggleEditComment(ridx) {
+      const form  = document.getElementById(`cedit-${ridx}`);
+      const input = document.getElementById(`cedit-input-${ridx}`);
+      const isOpen = form.classList.contains('show');
+      form.classList.toggle('show', !isOpen);
+      if (!isOpen) input.value = commentContents[ridx] || '';
+    }
+
+    async function submitEditComment(ridx) {
+      const contents = document.getElementById(`cedit-input-${ridx}`).value.trim();
+      if (!contents) return;
+
+      const data = await api('PUT', `/posts/${idx}/comments/${ridx}`, {
+        idx: ridx, ridx: Number(idx),
+        username: getUser(),
+        contents,
+        createdt: nowIso(),
+        recentdt: nowIso(),
+      });
+
+      if (data.flag === 0) await load();
+    }
+
+    async function deleteComment(ridx) {
+      if (!confirm('댓글을 삭제할까요?')) return;
+      const data = await api('DELETE', `/posts/${idx}/comments/${ridx}`);
+      if (data.flag === 0) await load();
+    }
+
+    load();
+  </script>
+</body>
+</html>

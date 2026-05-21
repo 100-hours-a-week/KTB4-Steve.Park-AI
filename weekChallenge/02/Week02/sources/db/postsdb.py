@@ -16,7 +16,7 @@ async def getBoardList(count: int) -> ResponseEntity:
     msg = ResponseEntity()
     async with AsyncSessionLocal() as session:
         board_result = await session.execute(
-            select(BoardTable).offset(count).limit(BOARD_PAGE_SIZE)
+            select(BoardTable).order_by(BoardTable.createdt.desc()).offset(count).limit(BOARD_PAGE_SIZE)
         )
         boards = board_result.scalars().all()
 
@@ -50,7 +50,7 @@ async def getBoardDetail(idx: int) -> ResponseEntity:
 
         if board is None:
             msg.flag = RF.InvalidBoardIdx.value
-            msg.msg = RF.InvalidBoardIdx.name
+            msg.msg = RF.InvalidBoardIdx.message
             return msg
 
         msg.res = Board(
@@ -101,7 +101,7 @@ async def writeBoard(board: Board) -> ResponseEntity:
     except Exception as e:
         print(e)
         msg.flag = RF.SaveBoardDataFailed.value
-        msg.msg = RF.SaveBoardDataFailed.name
+        msg.msg = RF.SaveBoardDataFailed.message
 
     return msg
 
@@ -140,7 +140,7 @@ async def getBoardCommentDetail(idx: int) -> ResponseEntity:
 
         if boardComment is None:
             msg.flag = RF.InvalidBoardCommentIdx.value
-            msg.msg = RF.InvalidBoardCommentIdx.name
+            msg.msg = RF.InvalidBoardCommentIdx.message
             return msg
 
         boardCommentDetail = BoardComment(
@@ -172,7 +172,7 @@ async def writeBoardComment(boardComment: BoardComment) -> ResponseEntity:
     except Exception as e:
         print(e)
         msg.flag = RF.SaveBoardCommentDataFailed.value
-        msg.msg = RF.SaveBoardCommentDataFailed.name
+        msg.msg = RF.SaveBoardCommentDataFailed.message
 
     return msg
 

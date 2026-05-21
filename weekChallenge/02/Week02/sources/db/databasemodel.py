@@ -1,9 +1,11 @@
+import os
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy import String, Integer, DateTime, Text
 from datetime import datetime
 
-DATABASE_URL = "sqlite+aiosqlite:///datas/community.db"
+_DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "datas", "community.db")
+DATABASE_URL = f"sqlite+aiosqlite:///{_DB_PATH}"
 
 engine = create_async_engine(DATABASE_URL)
 AsyncSessionLocal = async_sessionmaker(engine, expire_on_commit=False)

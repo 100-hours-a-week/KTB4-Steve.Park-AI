@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>게시판 · Community Board</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="/board" class="nav-logo">Community Board</a>
+    <div class="nav-right">
+      <span class="nav-user" id="navUser"></span>
+      <button class="btn btn-outline btn-sm" onclick="logout()">로그아웃</button>
+    </div>
+  </nav>
+
+  <div class="page-wrap">
+    <div class="page-header">
+      <h1 class="page-title">게시글 목록</h1>
+      <a href="/write" class="btn btn-primary btn-sm">+ 새 글 작성</a>
+    </div>
+
+    <div id="postList" class="post-list">
+      <div class="empty-state"><p>불러오는 중...</p></div>
+    </div>
+
+    <div class="pagination" id="pagination"></div>
+  </div>
+
+  <script src="/app.js"></script>
+  <script>
+    requireAuth();
+    document.getElementById('navUser').textContent = getUser();
+
+    const PAGE_SIZE = 10;
+    const WINDOW    = 5;
+    let currentPage  = 1;
+    let windowStart  = 1;
+    let totalPages   = 1;
+
+    function escHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    async function init() {
+      const countData = await api('GET', '/posts/count');
+      const total = countData.res ?? 0;
+      totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+      await loadPosts();
+    }
+
+    async function loadPosts() {
+      const list = document.getElementById('postList');
+      list.innerHTML = '<div class="empty-state"><p>불러오는 중...</p></div>';
+
+      try {
+        const offset = (currentPage - 1) * PAGE_SIZE;
+        const data   = await api('GET', '/posts', null, { count: offset });
+
+        if (data.flag !== 0 || !data.res || data.res.length === 0) {
+          list.innerHTML = '<div class="empty-state"><p>게시글이 없습니다.</p></div>';
+        } else {
+          list.innerHTML = data.res.map(post => `
+            <a class="post-item" href="/detail?idx=${post.idx}">
+              <div class="post-title">${escHtml(post.title)}</div>
+              <div class="post-meta">
+                <span>✍ ${escHtml(post.username)}</span>
+                <span>👁 ${post.viewcount}</span>
+                <span>💬 ${post.commentcount}</span>
+                <span>❤ ${post.likes ? post.likes.length : 0}</span>
+                <span style="margin-left:auto">${formatDate(post.recentdt)}</span>
+              </div>
+            </a>
+          `).join('');
+        }
+      } catch {
+        list.innerHTML = '<div class="empty-state"><p>서버에 연결할 수 없습니다.</p></div>';
+      }
+
+      renderPagination();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function goToPage(page) {
+      currentPage = page;
+      loadPosts();
+    }
+
+    function shiftWindow(dir) {
+      windowStart = Math.max(1, windowStart + dir * WINDOW);
+      currentPage = windowStart;
+      loadPosts();
+    }
+
+    function goFirst() {
+      windowStart = 1;
+      currentPage = 1;
+      loadPosts();
+    }
+
+    function goLast() {
+      windowStart = Math.max(1, Math.floor((totalPages - 1) / WINDOW) * WINDOW + 1);
+      currentPage = totalPages;
+      loadPosts();
+    }
+
+    function renderPagination() {
+      const nav       = document.getElementById('pagination');
+      const windowEnd = Math.min(totalPages, windowStart + WINDOW - 1);
+      const isFirst   = windowStart === 1;
+      const isLast    = windowEnd === totalPages;
+
+      const btns = [];
+
+      if (!isFirst) {
+        btns.push(`<button class="page-btn" onclick="goFirst()">«</button>`);
+        btns.push(`<button class="page-btn" onclick="shiftWindow(-1)">‹</button>`);
+      }
+
+      for (let p = windowStart; p <= windowEnd; p++) {
+        btns.push(`<button class="page-btn ${p === currentPage ? 'active' : ''}" onclick="goToPage(${p})">${p}</button>`);
+      }
+
+      if (!isLast) {
+        btns.push(`<button class="page-btn" onclick="shiftWindow(1)">›</button>`);
+        btns.push(`<button class="page-btn" onclick="goLast()">»</button>`);
+      }
+
+      nav.innerHTML = btns.join('');
+    }
+
+    init();
+  </script>
+</body>
+</html>

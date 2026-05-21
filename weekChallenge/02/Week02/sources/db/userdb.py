@@ -33,7 +33,7 @@ async def createUser(user: UserDetail) -> ResponseEntity:
     except Exception as e:
         print(e)
         msg.flag = RF.SaveUserDataFailed.value
-        msg.msg = RF.SaveUserDataFailed.name
+        msg.msg = RF.SaveUserDataFailed.message
     return msg
 
 
@@ -47,7 +47,7 @@ async def userLogin(useremail: str, pwd: str) -> ResponseEntity:
 
         if user is None:
             msg.flag = RF.UserNotExist.value
-            msg.msg = RF.UserNotExist.name
+            msg.msg = RF.UserNotExist.message
             return msg
 
         msg.res = UserDetail(
@@ -73,7 +73,7 @@ async def userUpdateLastLogin(useremail) -> ResponseEntity:
         print(e)
         print("유저 데이터 업데이트에 실패하였습니다...")
         msg.flag = RF.SaveUserDataFailed.value
-        msg.msg = RF.SaveUserDataFailed.name
+        msg.msg = RF.SaveUserDataFailed.message
         return msg
     
     return msg

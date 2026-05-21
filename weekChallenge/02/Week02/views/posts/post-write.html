@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>글 작성 · Community Board</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="/board" class="nav-logo">Community Board</a>
+    <div class="nav-right">
+      <span class="nav-user" id="navUser"></span>
+      <button class="btn btn-outline btn-sm" onclick="logout()">로그아웃</button>
+    </div>
+  </nav>
+
+  <div class="write-wrap">
+    <div class="write-header">
+      <h1 class="page-title" id="pageTitle">새 글 작성</h1>
+    </div>
+
+    <div id="alert" class="alert alert-error"></div>
+
+    <div class="form-group">
+      <label>제목</label>
+      <input type="text" id="title" placeholder="제목을 입력하세요" />
+    </div>
+    <div class="form-group">
+      <label>내용</label>
+      <textarea id="contents" placeholder="내용을 입력하세요"></textarea>
+    </div>
+
+    <div class="write-footer">
+      <button class="btn btn-outline" onclick="history.back()">취소</button>
+      <button class="btn btn-primary" id="submitBtn" onclick="submit()">등록</button>
+    </div>
+  </div>
+
+  <script src="/app.js"></script>
+  <script>
+    requireAuth();
+    document.getElementById('navUser').textContent = getUser();
+
+    const editIdx = getParam('idx');
+    if (editIdx) {
+      document.getElementById('pageTitle').textContent = '게시글 수정';
+      document.getElementById('submitBtn').textContent = '수정';
+      loadPost(editIdx);
+    }
+
+    async function loadPost(idx) {
+      const data = await api('GET', `/posts/${idx}`);
+      if (data.flag !== 0 || !data.res) { location.href = '/board'; return; }
+
+      if (data.res.board.username !== getUser()) {
+        alert('수정 권한이 없습니다.');
+        location.href = `/detail?idx=${idx}`;
+        return;
+      }
+
+      document.getElementById('title').value    = data.res.board.title;
+      document.getElementById('contents').value = data.res.board.contents;
+    }
+
+    function showAlert(msg) {
+      const el = document.getElementById('alert');
+      el.textContent = msg;
+      el.className = 'alert alert-error show';
+    }
+
+    async function submit() {
+      const title    = document.getElementById('title').value.trim();
+      const contents = document.getElementById('contents').value.trim();
+      const btn      = document.getElementById('submitBtn');
+
+      if (!title)    { showAlert('제목을 입력해주세요.'); return; }
+      if (!contents) { showAlert('내용을 입력해주세요.'); return; }
+
+      btn.disabled = true;
+      btn.innerHTML = '<span class="loader"></span>';
+
+      const body = {
+        idx: editIdx ? Number(editIdx) : 0,
+        username:     getUser(),
+        title,
+        contents,
+        viewcount:    0,
+        commentcount: 0,
+        likes:        [],
+        createdt:     nowIso(),
+        recentdt:     nowIso(),
+      };
+
+      try {
+        const data = editIdx
+          ? await api('PUT',  `/posts/${editIdx}`, body)
+          : await api('POST', '/posts',            body);
+
+        if (data.flag !== 0) {
+          showAlert(data.msg);
+        } else {
+          location.href = editIdx ? `/detail?idx=${editIdx}` : '/board';
+        }
+      } catch {
+        showAlert('서버에 연결할 수 없습니다.');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = editIdx ? '수정' : '등록';
+      }
+    }
+  </script>
+</body>
+</html>

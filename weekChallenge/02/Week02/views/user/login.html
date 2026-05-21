@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>로그인 · Community Board</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <h1 class="auth-title">로그인</h1>
+      <p class="auth-sub">Community Board에 오신 걸 환영합니다</p>
+
+      <div id="alert" class="alert alert-error"></div>
+
+      <div class="form-group">
+        <label>이메일</label>
+        <input type="email" id="email" placeholder="example@email.com" />
+      </div>
+      <div class="form-group">
+        <label>비밀번호</label>
+        <input type="password" id="pwd" placeholder="비밀번호를 입력하세요" />
+      </div>
+
+      <button class="btn btn-primary" id="loginBtn" onclick="login()">로그인</button>
+
+      <div class="auth-footer">
+        계정이 없으신가요? <a href="/join">회원가입</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="/app.js"></script>
+  <script>
+    if (getUser()) location.href = '/board';
+
+    document.getElementById('pwd').addEventListener('keydown', e => {
+      if (e.key === 'Enter') login();
+    });
+
+    function showAlert(msg) {
+      const el = document.getElementById('alert');
+      el.textContent = msg;
+      el.className = 'alert alert-error show';
+    }
+
+    async function login() {
+      const email = document.getElementById('email').value.trim();
+      const pwd   = document.getElementById('pwd').value;
+      const btn   = document.getElementById('loginBtn');
+
+      if (!email || !pwd) { showAlert('이메일과 비밀번호를 입력해주세요.'); return; }
+
+      btn.disabled = true;
+      btn.innerHTML = '<span class="loader"></span>';
+
+      try {
+        const data = await api('POST', '/session', null, { useremail: email, pwd });
+        if (data.flag !== 0) {
+          showAlert(data.msg);
+        } else {
+          localStorage.setItem('username', data.res.username);
+          location.href = '/board';
+        }
+      } catch {
+        showAlert('서버에 연결할 수 없습니다.');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '로그인';
+      }
+    }
+  </script>
+</body>
+</html>
