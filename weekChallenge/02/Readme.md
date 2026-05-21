@@ -157,7 +157,7 @@ python seed.py
 
 ```json
 {
-  "flag": 0,
+  "error_code": 0,
   "msg": "Success",
   "res": null
 }
@@ -165,7 +165,7 @@ python seed.py
 
 | 필드 | 설명 |
 |---|---|
-| `flag` | 0 = 성공, 그 외 = 오류 코드 |
+| `error_code` | 0 = 성공, 그 외 = 오류 코드 |
 | `msg` | 결과 메시지 |
 | `res` | 응답 데이터 |
 
