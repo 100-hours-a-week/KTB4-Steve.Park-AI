@@ -32,17 +32,17 @@ Week02/
 │   │   └── join.html              # 회원가입 페이지
 │   └── posts/
 │       ├── posts.html             # 게시글 목록 (페이지네이션)
-│       ├── post-write.html        # 게시글 작성 / 수정
-│       └── post-detail.html       # 게시글 상세 / 댓글 / 좋아요 / AI 요약
+│       ├── post_write.html        # 게시글 작성 / 수정
+│       └── post_detail.html       # 게시글 상세 / 댓글 / 좋아요 / AI 요약
 └── sources/                       # 백엔드 소스
     ├── user/
     │   ├── user_router.py         # 유저 페이지 및 API 라우터
-    │   └── userUtils.py           # 유저 비즈니스 로직
+    │   └── user_utils.py          # 유저 비즈니스 로직
     ├── posts/
     │   ├── posts_router.py        # 게시판 페이지 및 API 라우터
-    │   └── postsUtils.py          # 게시판 비즈니스 로직
+    │   └── posts_utils.py         # 게시판 비즈니스 로직
     ├── ai/
-    │   └── aiUtils.py             # Ollama 연동 AI 요약 기능
+    │   └── ai_utils.py            # Ollama 연동 AI 요약 기능
     ├── db/
     │   ├── databasemodel.py       # SQLAlchemy 테이블 모델 정의
     │   ├── postsdb.py             # 게시판 DB 쿼리

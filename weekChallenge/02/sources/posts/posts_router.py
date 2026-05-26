@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 from fastapi.responses import FileResponse
 from utils.models import ResponseEntity, Board, BoardComment
-from . import postsUtils
-from ai import aiUtils
+from . import posts_utils
+from ai import ai_utils
 
 router = APIRouter()
 
@@ -12,56 +12,56 @@ def board_page():
 
 @router.get("/write",  response_class=FileResponse)
 def write_page():
-	return "views/posts/post-write.html"
+	return "views/posts/post_write.html"
 
 @router.get("/detail", response_class=FileResponse)
 def detail_page():
-	return "views/posts/post-detail.html"
+	return "views/posts/post_detail.html"
 
 @router.get("/posts/count")
 async def getBoardCount() -> ResponseEntity:
-	return await postsUtils.getBoardCount()
+	return await posts_utils.getBoardCount()
 
 @router.get("/posts")
 async def getBoardList(count: int) -> ResponseEntity:
-	return await postsUtils.getBoardList(count)
+	return await posts_utils.getBoardList(count)
 
 @router.get("/posts/{idx}")
 async def getBoardDetail(idx: int) -> ResponseEntity:
-	return await postsUtils.getBoardDetail(idx)
+	return await posts_utils.getBoardDetail(idx)
 
 @router.post("/posts")
 async def writeBoard(board: Board) -> ResponseEntity:
-	return await postsUtils.writeBoard(board)
+	return await posts_utils.writeBoard(board)
 
 @router.put("/posts/{idx}")
 async def updateBoard(idx:int, board: Board) -> ResponseEntity:
-	return await postsUtils.updateBoard(idx, board)
+	return await posts_utils.updateBoard(idx, board)
 
 @router.delete("/posts/{idx}")
 async def deleteBoard(idx: int) -> ResponseEntity:
-	return await postsUtils.deleteBoard(idx)
+	return await posts_utils.deleteBoard(idx)
 
 @router.post("/posts/{idx}/comments")
 async def writeBoardComment(idx: int, comment: BoardComment) -> ResponseEntity:
-	return await postsUtils.writeBoardComment(idx, comment)
+	return await posts_utils.writeBoardComment(idx, comment)
 
 @router.put("/posts/{idx}/comments/{ridx}")
 async def updateBoardComment(idx: int, ridx: int, comment: BoardComment) -> ResponseEntity:
-	return await postsUtils.updateBoardComment(idx, ridx, comment)
+	return await posts_utils.updateBoardComment(idx, ridx, comment)
 
 @router.delete("/posts/{idx}/comments/{ridx}")
 async def deleteBoardComment(idx: int, ridx: int) -> ResponseEntity:
-	return await postsUtils.deleteBoardComment(idx, ridx)
+	return await posts_utils.deleteBoardComment(idx, ridx)
 
 @router.patch("/posts/{idx}")
 async def updateBoardLikes(idx: int, username: str) -> ResponseEntity:
-	return await postsUtils.updateBoardLikes(idx, username)
+	return await posts_utils.updateBoardLikes(idx, username)
 
 @router.get("/posts/{idx}/summary")
 async def getGemmaPostSummary(idx: int) -> ResponseEntity:
-	return await aiUtils.getGemmaPostSummary(idx)
+	return await ai_utils.getGemmaPostSummary(idx)
 
 @router.get("/posts/{idx}/comments/summary")
 async def getGemmaPostCommentSummary(idx: int) -> ResponseEntity:
-	return await aiUtils.getGemmaPostCommentSummary(idx)
+	return await ai_utils.getGemmaPostCommentSummary(idx)

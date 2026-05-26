@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from fastapi.responses import FileResponse, RedirectResponse
 from utils.models import UserDetail, ResponseEntity
-from . import userUtils
+from . import user_utils
 
 router = APIRouter()
 
@@ -15,8 +15,8 @@ def join_page():
 
 @router.post("/user")
 async def signup(user: UserDetail) -> ResponseEntity:
-	return await userUtils.signup(user)
+	return await user_utils.signup(user)
 
 @router.post("/session")
 async def login(useremail: str, pwd: str) -> ResponseEntity:
-	return await userUtils.login(useremail, pwd)
+	return await user_utils.login(useremail, pwd)
