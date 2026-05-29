@@ -1,7 +1,7 @@
 # TIL 목록
-- 교재 정리
-- 주 강의 정리
-- 딥다이브
+- [교재 정리](#교재-정리)
+- [주 강의 정리](#주-강의-정리-최신순)
+- [딥다이브](#딥다이브-최신순)
 ---
 ## 교재 정리
 - [교재 요약 목록](https://app.notion.com/p/adapterz/36f394a4806180e2a0e9d3a555efaca9?source=copy_link)
@@ -26,9 +26,9 @@
 - [2026.05.14](https://www.notion.so/adapterz/2026-05-14-362394a480618084a1dcc44bbcf7fa1e?source=copy_link)
 
 ---
-## 딥다이브  (최신순)
+## 딥다이브 (최신순)
 ### [Week 2 딥다이브]
+> [2주차 딥다이브](https://www.notion.so/adapterz/2-368394a48061802bb96df80fef4f15c3?source=copy_link)
 > #### 주제 : 이터레이터와 제네레이터가 메모리 공간 효율성을 개선하는 방식을 설명하고,
 > 대규모 데이터 처리(예: 로그 파일 분석)에서 이를 활용하는 구체적인 시나리오를 제시하시오.
-> [2주차 딥다이브](https://www.notion.so/adapterz/2-368394a48061802bb96df80fef4f15c3?source=copy_link)
 ---
