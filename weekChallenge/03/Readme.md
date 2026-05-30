@@ -14,7 +14,8 @@ Python 데이터 분석의 핵심 라이브러리인 **NumPy**, **Pandas**, **Ma
 ├── utils/
 │   └── utils.py          # 공통 출력 유틸리티
 └── data/
-    └── unique_data.csv   # 중복 제거 퀘스트에서 생성되는 CSV
+    ├── unique_data.csv              # 중복 제거 퀘스트에서 생성되는 CSV
+    └── metacritic_Toppc_games.csv   # Kaggle PC 게임 데이터셋
 ```
 
 ---
@@ -45,6 +46,14 @@ Python 데이터 분석의 핵심 라이브러리인 **NumPy**, **Pandas**, **Ma
 | Data Mutation Quest 5 | **Pivot (피벗)** | `pivot`, `pivot_table`, 다중 값 컬럼 피벗 테이블 생성 |
 | Data Mutation Quest 6 | **Duplicates Removal (중복 제거)** | `drop_duplicates`, `duplicated`, CSV 저장 및 불러오기 |
 | Data Mutation Quest 7 | **String Operations (문자열 처리)** | `str.lower`, `str.strip`, `str.contains`, `str.split`으로 문자열 조작 |
+
+### 실제 데이터 분석 (Kaggle PC 게임 데이터)
+
+| 분석 | 주제 | 핵심 개념 |
+|------|------|-----------|
+| PC Game Analysis | **Metacritic 상위 PC 게임 점수 분석** | `read_csv`, `str.split().astype(float)`로 Score 파싱, `groupby('Rating')`으로 등급별 `max/min/mean` 집계, 조건 필터링으로 저점수 게임 추출 |
+
+> **데이터 출처**: [Kaggle - Top PC Games: Metacritic vs Steam Popularity](https://www.kaggle.com/datasets/alyahmedts13/top-pc-games-metacritic-vs-steam-popularity)
 
 ---
 
