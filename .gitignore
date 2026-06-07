@@ -8,6 +8,7 @@
 *.iml
 *.class
 *.jar
+*.json
 *.war
 *.ear
 *.zip
@@ -15,3 +16,14 @@
 *.7z
 *.vscode
 *.idea
+
+# Ignore Python bytecode and cache
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+
+# Ignore markdown files except README/Readme
+*.md
+!Readme.md
+!README.md
