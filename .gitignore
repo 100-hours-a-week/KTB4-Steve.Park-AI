@@ -1,0 +1,17 @@
+*.DS_Store
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+*.idea
+*.iml
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.7z
+*.vscode
+*.idea

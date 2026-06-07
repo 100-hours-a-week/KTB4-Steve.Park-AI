@@ -1,4 +1,6 @@
-# Week Challenge 03 - NumPy, Pandas & 데이터 시각화 미니퀘스트
+# Week 03 - NumPy, Pandas & 데이터 시각화 미니퀘스트
+
+> KTB 위클리 챌린지 3주차 — Numpy, Pandas 그리고 시각화 실습하기
 
 Python 데이터 분석의 핵심 라이브러리인 **NumPy**, **Pandas**, **Matplotlib**, **Seaborn**, **SciPy**의 주요 개념을 실습하는 미니퀘스트 모음입니다.
 
