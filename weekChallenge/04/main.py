@@ -2,22 +2,22 @@
 # This library is used later in the Random Forest section.
 
 # If you didn't install tensorflow_decision_forests, please execute next code
-!pip install tensorflow_decision_forests
+# !pip install tensorflow_decision_forests
 
 # Data Augmentataion 실행 시 오류 나면 해당 코드를 실행
-!pip install imbalanced-learn
+# !pip install imbalanced-learn
 
-The user provided a `curl` command to download the dataset from Kaggle. I will use this to get the data into the environment.
+# The user provided a `curl` command to download the dataset from Kaggle. I will use this to get the data into the environment.
 
 # Download the dataset from Kaggle
 # Ensure you have a 'data' directory for consistency with the original code.
 
 # If you don't have this file, please download it
-!mkdir -p data
-!curl -L -o data/pubg-stats-dataset.zip https://www.kaggle.com/api/v1/datasets/download/mohammadtalib786/pubg-stats-dataset
+# !mkdir -p data
+# !curl -L -o data/pubg-stats-dataset.zip https://www.kaggle.com/api/v1/datasets/download/mohammadtalib786/pubg-stats-dataset
 
 # Unzip the downloaded dataset
-!unzip -o data/pubg-stats-dataset.zip -d data/
+# !unzip -o data/pubg-stats-dataset.zip -d data/
 
 import numpy as np
 import pandas as pd
@@ -42,7 +42,7 @@ from copy import deepcopy
 # 배틀그라운드 스탯 정보 출처 : https://www.kaggle.com/datasets/mohammadtalib786/pubg-stats-dataset
 original_data = pd.read_csv("data/Pubg_Stats.csv")
 
-Now that the `tensorflow_decision_forests` library is installed and the dataset is downloaded and extracted, the original data loading cell should work as expected.
+# Now that the `tensorflow_decision_forests` library is installed and the dataset is downloaded and extracted, the original data loading cell should work as expected.
 
 ##############################
 #       데이터 전처리           #
