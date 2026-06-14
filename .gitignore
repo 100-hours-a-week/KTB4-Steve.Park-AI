@@ -17,6 +17,7 @@
 *.pt
 *.vscode
 *.idea
+*_log*
 
 # Ignore Python bytecode and cache
 *.pyc

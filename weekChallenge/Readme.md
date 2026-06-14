@@ -12,6 +12,7 @@
 | Week 02 | FastAPI 커뮤니티 게시판 + AI 요약 | [바로가기](02/Readme.md) |
 | Week 03 | NumPy / Pandas / 데이터 시각화 미니퀘스트 | [바로가기](03/Readme.md) |
 | Week 04 | ML 알고리즘 & 딥러닝 모델 탐구 | [바로가기](04/Readme.md) |
+| Week 05 | CNN 전이학습(ResNet/VGG) & 한국어 Mini-GPT 챗봇 | [바로가기](05/Readme.md) |
 
 ---
 
@@ -54,3 +55,13 @@ PUBG 스탯 데이터로 머신러닝 알고리즘을 비교하고, CNN 이미�
 - K-NN / Perceptron / SVM / Random Forest / Naive Bayes
 - SMOTE 데이터 증강 (0.8889 → 0.9625)
 - 활성화 함수 비교 / MLP / CNN (고양이 vs 강아지)
+
+---
+
+### Week 05 — CNN 전이학습 & 한국어 Mini-GPT 챗봇
+
+ResNet50/VGG16 전이학습 비교 실험과, BPE 토크나이저부터 직접 구현한 한국어 SOP_GPT 챗봇
+
+- `weights='imagenet'` + `trainable=False` 조합이 가장 효과적 (RandomSearch: Test Accuracy 0.33 → 0.90)
+- BPE 토크나이저 직접 구현(NFD 자모 분해 + UNK 버킷팅) + nanoGPT 스타일 SOP_GPT 아키텍처
+- Stage 1(이어쓰기) → Stage 2(Q&A fine-tuning) 2단계 학습, FastAPI로 채팅형 UI 서빙
