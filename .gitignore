@@ -14,6 +14,7 @@
 *.zip
 *.tar.gz
 *.7z
+*.pt
 *.vscode
 *.idea
 
