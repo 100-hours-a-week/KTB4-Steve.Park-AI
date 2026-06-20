@@ -48,6 +48,15 @@ pip install -r requirements.txt
 
 ### 1. RAG 파이프라인만 테스트
 
+```bash
+python3 repl.py
+```
+
+실행하면 모델/인덱스를 로딩한 뒤 `Q>` 프롬프트가 뜨고, 질문을 입력할 때마다 답변과 출처
+(`graph`/`vector`)를 바로 출력함. 종료는 `exit`/`quit` 또는 Ctrl+C.
+
+코드로 직접 호출하고 싶다면:
+
 ```python
 from rag.pipeline import RAGPipeline
 
