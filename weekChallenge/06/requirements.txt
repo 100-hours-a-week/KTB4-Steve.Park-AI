@@ -1,0 +1,13 @@
+sentence-transformers
+chromadb
+networkx
+torch
+transformers
+accelerate
+fastapi
+uvicorn[standard]
+pydantic
+ragas
+langchain_community==0.3.7
+datasets
+langchain-huggingface
