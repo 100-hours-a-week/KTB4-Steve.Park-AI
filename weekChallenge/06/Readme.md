@@ -77,13 +77,21 @@ uvicorn app:app --reload
 `use_graph`(기본값 `true`)로 그래프 라우팅을 켜고 끌 수 있어서, 같은 질문을 그래프 적용/미적용으로
 바로 비교해볼 수 있음:
 
+localhost:8000/docs 접속 후 /query에서 
+question에는 질문,
+use_graph는 True면 그래프검색 설정 / False면 그래프 검색 끄기
+로 테스트 가능
+
 ```bash
-curl -s localhost:8000/query -d '{"question": "박상욱님이 스카이워크에서 가장 최근에 참여한 프로젝트는?", "use_graph": true}'
+curl -s localhost:8000/query -H "Content-Type: application/json" -d '{"question": "박상욱님이 스카이워크에서 가장 최근에 참여한 프로젝트는?", "use_graph": true}'
 # -> source_type: "graph", answer: "...'코코마인'입니다..."
 
-curl -s localhost:8000/query -d '{"question": "박상욱님이 스카이워크에서 가장 최근에 참여한 프로젝트는?", "use_graph": false}'
+curl -s localhost:8000/query -H "Content-Type: application/json" -d '{"question": "박상욱님이 스카이워크에서 가장 최근에 참여한 프로젝트는?", "use_graph": false}'
 # -> source_type: "vector", answer: "...'놀러와 마이홈'입니다..." (틀린 답)
 ```
+
+> `-H "Content-Type: application/json"`을 빠뜨리면 curl이 기본값인 `application/x-www-form-urlencoded`로
+> 보내서 FastAPI가 body를 파싱하지 못하고 422 에러가 남.
 
 ### 3. RAGAS 평가
 
