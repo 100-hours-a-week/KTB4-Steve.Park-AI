@@ -8,6 +8,7 @@
 
 ---
 ## 주 강의 정리 (최신순)
+  
 ### Week 4 (데이터 분석 & 데이터 시각화)
 - [2026.06.05](https://app.notion.com/p/adapterz/2026-06-05-376394a4806180e98bdedd908d6f45f1?source=copy_link)
 - [2026.06.04](https://app.notion.com/p/adapterz/2026-06-04-375394a48061802d8feffbff6cf345a9?source=copy_link)
@@ -33,16 +34,33 @@
 
 ---
 ## 딥다이브 (최신순)
+
+### [Week 9 딥다이브]
+> [9주차 딥다이브](https://github.com/1sanguk/KTB-Deepdive/blob/main/09/README.md)
+> #### 주제 : GGUF Format이 Llama.cpp 기반 로컬 LLM 추론 환경에서 사용되는 이유를 설명하고, 모델 파일 구조와 실행 환경 최적화 관점에서 GGUF가 제공하는 장점을 서술하시오.
+
+### [Week 8 딥다이브]
+> [8주차 딥다이브](https://github.com/1sanguk/KTB-Deepdive/blob/main/08/README.md)
+> #### 주제 : MCP의 Context Isolation이 AI Agent와 외부 도구·데이터 소스를 연결할 때 필요한 이유를 설명하고, 컨텍스트가 분리되지 않았을 때 발생할 수 있는 보안·권한·데이터 오염 문제를 구체적으로 분석하시오.
+
+### [Week 6 딥다이브]
+> [6주차 딥다이브](https://github.com/1sanguk/KTB-Deepdive/blob/main/06/README.md)
+> #### 주제 : Hybrid Search가 Sparse Vector 검색과 Dense Vector 검색을 결합해 검색 품질을 높이는 원리를 설명하시오. 또한 키워드 기반 검색만 사용했을 때와 의미 기반 검색만 사용했을 때 발생할 수 있는 검색 실패를 Hybrid Search가 어떻게 보완하는지 분석하시오.
+
+### [Week 5 딥다이브]
+> [5주차 딥다이브](https://github.com/1sanguk/KTB-Deepdive/blob/main/05/README.md)
+> #### 주제 : 트랜스포머의 위치 인코딩 방식 3가지(기본 Sinusoidal, BERT의 학습형 절대 위치, RoPE 상대 위치)를 설명하고 비교하시오.
+
 ### [Week 4 딥다이브]
-> [4주차 딥다이브](https://app.notion.com/p/adapterz/4-377394a480618092aef9d908a0d2883c?v=360394a480618172adc8000c827d90c4&source=copy_link)
+> [4주차 딥다이브](https://github.com/1sanguk/KTB-Deepdive/blob/main/04/README.md)
 > #### 주제 : 머신러닝 모델(Perceptron, SVM, Random Forest 등)이 동일한 데이터셋에서 전처리 방식(정규화, 표준화, 결측치 처리)에 따라 성능이 어떻게 달라질 수 있는지 사례를 들어 설명하시오.
 
 ### [Week 3 딥다이브]
-> [3주차 딥다이브](https://app.notion.com/p/adapterz/3-370394a4806180e7b99fd78729634dd6?v=360394a480618172adc8000c827d90c4&source=copy_link)
+> [3주차 딥다이브](https://github.com/1sanguk/KTB-Deepdive/blob/main/03/README.md)
 > #### 주제 : NumPy 배열의 생성과 연산이 데이터를 어떻게 처리하는지 설명하시오 (브로드캐스팅 포함)
 
 ### [Week 2 딥다이브]
-> [2주차 딥다이브](https://app.notion.com/p/adapterz/2-368394a48061802bb96df80fef4f15c3?v=360394a480618172adc8000c827d90c4&source=copy_link)
+> [2주차 딥다이브](https://github.com/1sanguk/KTB-Deepdive/blob/main/02/README.md)
 > #### 주제 : 이터레이터와 제네레이터가 메모리 공간 효율성을 개선하는 방식을 설명하고,
 > #### 대규모 데이터 처리(예: 로그 파일 분석)에서 이를 활용하는 구체적인 시나리오를 제시하시오.
 ---
